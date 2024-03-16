@@ -301,6 +301,7 @@ static bool configure_keyboard(const usb_hcd_t *hcd, const usb_ep_t *ep0, int in
 }
 
 #define CH341_REQ_SERIAL_INIT 0xA1
+#define CH341_REQ_WRITE_REG   0x9A
 
 static bool configure_ch341(const usb_hcd_t *hcd, const usb_ep_t *ep0)
 {
@@ -308,6 +309,12 @@ static bool configure_ch341(const usb_hcd_t *hcd, const usb_ep_t *ep0)
 
     // Set up serial line
     build_setup_packet(&setup_pkt, USB_REQ_TO_DEVICE | USB_REQ_VENDOR, CH341_REQ_SERIAL_INIT, 0, 0, 0);
+    if (!hcd->methods->setup_request(hcd, ep0, &setup_pkt)) {
+        return false;
+    }
+
+    // div/prescale F3 07 gives 923077 baud, set bit 7 for non-buffered
+    build_setup_packet(&setup_pkt, USB_REQ_TO_DEVICE | USB_REQ_VENDOR, CH341_REQ_WRITE_REG, 0x1312, 0xf387, 0);
     if (!hcd->methods->setup_request(hcd, ep0, &setup_pkt)) {
         return false;
     }
