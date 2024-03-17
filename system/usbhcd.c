@@ -915,6 +915,7 @@ bool find_attached_usb_keyboards(const usb_hcd_t *hcd, const usb_hub_t *hub, int
 
                 print_usb_info(" Keyboard found on port %i interface %i endpoint %i",
                                port_num, kbd->interface_num, kbd->endpoint_num);
+
             } else if (kbd->reserved == (uint8_t) DEV_SERIAL_CH341) {
                 if (!configure_ch341(hcd, &ep0)) break;
                 print_hcd = hcd;
@@ -922,6 +923,7 @@ bool find_attached_usb_keyboards(const usb_hcd_t *hcd, const usb_hub_t *hub, int
 
                 print_usb_info(" CH341 serial adapter found on port %i interface %i endpoint %i",
                                port_num, kbd->interface_num, kbd->endpoint_num);
+
             } else if (kbd->reserved == (uint8_t) DEV_SERIAL_CP210X) {
                 if (!configure_cp210x(hcd, &ep0, kbd->interface_num)) break;
                 print_hcd = hcd;
@@ -929,6 +931,7 @@ bool find_attached_usb_keyboards(const usb_hcd_t *hcd, const usb_hub_t *hub, int
 
                 print_usb_info(" CP210x serial adapter found on port %i interface %i endpoint %i",
                                port_num, kbd->interface_num, kbd->endpoint_num);
+
             } else if (kbd->reserved == (uint8_t) DEV_SERIAL_PL2303) {
                 if (!configure_pl2303(hcd, &ep0)) break;
                 print_hcd = hcd;
