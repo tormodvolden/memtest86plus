@@ -156,12 +156,12 @@ static void parse_serial_params(const char *params)
         return;
     }
 
-    // Configure TTY port or use default
-    if (params[4] >= '0' && params[4] <= '3') {
-        tty_address = serial_io_ports[params[4] - '0'];
-    } else {
+    // Use the default TTY port if invalid port number or end of string (\0)
+    if (params[4] < '0' && params[4] > '3') {
         return;
     }
+
+    tty_address = serial_io_ports[params[4] - '0'];
 
     // No Baud Rate specified, use default
     if (params[5] != ',' || params[6] == '\0') {
